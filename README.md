@@ -29,6 +29,8 @@ Download `easy_logger.py` and add it to your packages.
 
 ## INSTRUCTIONS FOR USE
 ```py
+from easy_logger import EasyLogger
+
 if __name__ == "__main__":
     logger = EasyLogger(log_file=r"your\path\logs.log")
 
