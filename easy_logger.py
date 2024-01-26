@@ -22,22 +22,30 @@ SOFTWARE.
 
 import datetime
 
-class EasyLogger:
-    def __init__(self, log_file):
+class CustomLogger:
+    def __init__(self, log_file: str) -> None:
+        """
+         Initialize the logger and log the file. This is called by __init__
+         and should not be called directly
+
+         Args:
+            log_file: Path to the log
+        """
         self._log_file = log_file
         if not log_file:
-            raise FileNotFoundError("Need a file path to continue (your\path\logs.log)")
+            raise FileNotFoundError(
+                "Need a file path to continue (your/path/logs.log)"
+            )
 
-    def info(self, message):
-        self.write_log(message, "INFO")
+    def _write_log(self, message: str, level: str) -> None:
+        """
+         Write a log message to the log file. This is a convenience method for
+         use in unit tests.
 
-    def warning(self, message):
-        self.write_log(message, "WARNING")
-
-    def error(self, message):
-        self.write_log(message, "ERROR")
-
-    def write_log(self, message, level):
+         Args:
+            message: The message to write to the log file.
+            level: The level of the message to write ( INFO WARN ERROR etc
+        """
         timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
         log_message = f"{timestamp} - {level}: {message}"
@@ -45,8 +53,39 @@ class EasyLogger:
         with open(self._log_file, "a") as file:
             file.write(log_message + "\n")
 
+    def info(self, message: str) -> None:
+        """
+         Write a message to the log.
+         This is a convenience method for _write_log ( message " INFO " )
+
+         Args:
+            message: The message to write
+        """
+        self._write_log(message, "INFO")
+
+    def warning(self, message: str) -> None:
+        """
+         Write a warning message to the log.
+         This is a convenience method for _write_log ( message " WARNING " )
+
+         Args:
+            message: The message to write
+        """
+        self._write_log(message, "WARNING")
+
+    def error(self, message: str) -> None:
+        """
+         Write an error message to the log.
+         This is a convenience method for _write_log with the ERROR level.
+
+         Args:
+            message: The message to write to the log ( string
+        """
+        self._write_log(message, "ERROR")
+
+
 if __name__ == "__main__":
-    logger = EasyLogger(log_file=r"your\path\logs.log")
+    logger = CustomLogger(log_file="your/path/logs.log")
 
     logger.info("Some very cool info")
     logger.error("Some very bad error")
